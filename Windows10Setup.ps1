@@ -347,10 +347,17 @@ Function Set-PageFile
     }
     else 
     {
-        $Drive = $PageFileDrive + ":"
+        IF ($PageFileDrive -like "*:")
+        {
+            $Drive = $PageFileDrive
+        }
+        else 
+        {
+            $Drive = $PageFileDrive + ":"
+        }
     }
     #recomended Page file size is double the memory installed
-    Write-Host "Moving Page file to: $Drive"
+    Write-Host "Setting Page file size on: $Drive"
     write-host "Total Memory Installed (gb): $TotalMemSize"
     #2gb
     If (($TotalMemSize -gt "1") -and ($TotalMemSize -le "2.1")) 
