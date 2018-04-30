@@ -109,6 +109,7 @@ Param(
         [Switch]$DisableXboxServices,
         [Switch]$DisableAds,
         [Switch]$DisableWindowsStore,
+        [Switch]$DisableConnectToInternetUpdates,
         [ValidateSet('Mountain Standard Time','Pacific Standard Time','Eastern Standard Time','Central Standard Time')]
         $SetTimeZone,
         [Switch]$InstallDC,
@@ -486,6 +487,18 @@ Function Set-PowerConfig
     powercfg.exe -x -standby-timeout-dc 0
 }
 
+Function Disable-ConnectToInternetUpdates
+{
+    Write-Host 'Disabling Consumer Experience'
+    $RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+    $Name = "DoNotConnectToWindowsUpdateInternetLocations"
+    $Value = "1"
+    $Type = "DWORD"
+
+    Set-Location HKLM:
+    New-ItemProperty -Path $RegPath -Name $Name -Value $Value -PropertyType $Type -Force | Out-Null
+    Set-Location $PSScriptRoot
+}
 
 #Checks to see what switches are being used 
 If (($StartMenuLayout) -and ($ExportStartMenuLayout))
@@ -528,112 +541,60 @@ IF ($Preset -EQ "DomainComputerSetup")
 }
 
 #Exports the current start menu config 
-If ($ExportStartMenuLayout)
-{
-    Export-StartMenuLayout
-}
+If ($ExportStartMenuLayout){ Export-StartMenuLayout}
 
 #If a config file is specifed will import it 
-IF ($StartMenuLayout)
-{
-    Import-StartMenuLayout
-}
+IF ($StartMenuLayout) {Import-StartMenuLayout}
 
 #Enable RDP 
-IF ($EnableRDP)
-{
-    Enable-RDP
-}
+IF ($EnableRDP) {Enable-RDP}
 
-IF ($SetTimeZone)
-{
-    Set-Time
-}
+IF ($SetTimeZone) {Set-Time}
 
 #Disbales Xbox Services and stops them
-If ($DisableXboxServices)
-{
-    Disable-XboxServices
-}
+If ($DisableXboxServices) {Disable-XboxServices}
 
 #Add regkeys to disable OneDrive
-If ($DisableOneDrive)
-{
-    Disable-OneDrive
-}
+If ($DisableOneDrive) {Disable-OneDrive}
 
 #adds regkey needed to disable Cortana
-If ($DisableCortana)
-{
-    Disable-Cortana
-}
+If ($DisableCortana) {Disable-Cortana}
 
 #Disables the windows store, The app is still listed
-If ($DisableWindowsStore)
-{
-    Disable-WindowsStore
-}
+If ($DisableWindowsStore) {Disable-WindowsStore}
 
 #Disables add on the start menu and lock screen
-If ($DisableAds)
-{
-    Disable-Ads
-}
+If ($DisableAds) {Disable-Ads}
 
 #Disables Hibernate
-If ($DisableHibernate)
-{
-    Disable-Hibernate
-}
+If ($DisableHibernate) {Disable-Hibernate}
 
 #Disables Windows Tips
-If ($DisableWindowsTips)
-{	
-    Disable-WindowsTips
-}
+If ($DisableWindowsTips) {Disable-WindowsTips}
 
 #Disables Consumer Experience
-If ($DisableConsumerExperience)
-{
-    Disable-ConsumerExperience
-}
+If ($DisableConsumerExperience) {Disable-ConsumerExperience}
+
+#Disable Connect to Windows Update Internet Location
+IF ($DisableConnectToInternetUpdates) {Disable-ConnectToInternetUpdates}
 
 #If a list file is specifyed will run the uninstall process
-IF ($RemoveApps)
-{
-    Remove-Apps
-}
+IF ($RemoveApps) {Remove-Apps}
 
 #renames the computer
-If ($RenameComputer)
-{
-    Rename-Computer -NewName $RenameComputer
-}
+If ($RenameComputer) {Rename-Computer -NewName $RenameComputer}
 
 #joins the computer to a domain
-If ($JoinDomain)
-{
-    Join-Domain
-}
+If ($JoinDomain) {Join-Domain}
 
 #Sets the page file
-If ($SetPageFile)
-{
-    Set-PageFile
-}
+If ($SetPageFile) {Set-PageFile}
 
 #Sets power config
-IF ($SetPowerConfig)
-{ 
-    Set-PowerConfig
-}
+IF ($SetPowerConfig) {Set-PowerConfig}
 
-IF ($InstallDC)
-{
-    Install-DC
-}
+IF ($InstallDC) {Install-DC}
 
-Write-Host "You will need to reboot the computer before you see the change take affect"
 #Reboots the computer
 If ($Reboot)
 {
@@ -641,5 +602,6 @@ If ($Reboot)
 }
 else 
 {
+    Write-Host "You will need to reboot the computer before you see the change take affect"
     Exit 0 
 }
