@@ -331,7 +331,7 @@ Function Remove-Apps
     {
         Get-AppxPackage -AllUsers | where-object {$_.name -notlike "*Store*" -and $_.name -notlike "*Calculator*" -and $_.name -notlike "*Windows.Photos*" -and $_.name -notlike "*SoundRecorder*" -and $_.name -notlike "*MSPaint*" -and $_.name -notlike "*ZuneVideo*" -and $_.name -notlike "*BingWeather*" -and $_.name -notlike "*sticky*"} | Remove-AppxPackage -erroraction silentlycontinue
         Get-AppxPackage -AllUsers | where-object {$_.name -notlike "*Store*" -and $_.name -notlike "*Calculator*" -and $_.name -notlike "*Windows.Photos*" -and $_.name -notlike "*SoundRecorder*" -and $_.name -notlike "*MSPaint*" -and $_.name -notlike "*ZuneVideo*" -and $_.name -notlike "*BingWeather*" -and $_.name -notlike "*sticky*" } | Remove-AppxPackage -erroraction silentlycontinue
-        Get-AppxProvisionedPackage -online | where-object {$_.displayname -notlike "*Store*" -and $_.displayname -notlike "*Calculator*" -and $_.displayname -notlike "*Windows.Photos*" -and $_.displayname -notlike "*SoundRecorder*"  -and $_.displayname -notlike "*MSPaint*" -and $_.name -notlike "*ZuneVideo*" -and $_.name -notlike "*BingWeather*" -and $_.name -notlike "*sticky*" } | Remove-AppxProvisionedPackage -online -erroraction silentlycontinue
+        Get-AppxProvisionedPackage -online | where-object {$_.displayname -notlike "*Store*" -and $_.displayname -notlike "*Calculator*" -and $_.displayname -notlike "*Windows.Photos*" -and $_.displayname -notlike "*SoundRecorder*"  -and $_.displayname -notlike "*MSPaint*" -and $_.displayname -notlike "*ZuneVideo*" -and $_.displayname -notlike "*BingWeather*" -and $_.displayname -notlike "*sticky*" } | Remove-AppxProvisionedPackage -online -erroraction silentlycontinue
     }
 }
 
